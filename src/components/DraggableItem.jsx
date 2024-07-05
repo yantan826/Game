@@ -4,30 +4,17 @@ import { useDrag } from 'react-dnd';
 const DraggableItem = ({ id, x, y, updatePosition }) => {
   const ref = useRef(null);
 
-  const [{ isDragging }, drag, dragPreview] = useDrag(() => ({
+  const [, drag] = useDrag(() => ({
     type: 'ITEM',
     item: { id, x, y },
-    end: (item, monitor) => {
-      if (monitor.didDrop()) {
-        const dropResult = monitor.getDropResult();
-        if (dropResult) {
-            const delta = monitor.getDifferenceFromInitialOffset();
-            if (delta) { // Check if delta is not null
-              const left = Math.round(item.x + delta.x);
-              const top = Math.round(item.y + delta.y);
-              updatePosition(item.id, left, top);
-            }
-        }
-      }
-    },
-  }), [id, x, y, updatePosition]);
+  }), [id, x, y]);
 
   drag(ref);
 
   return (
     <div
       ref={ref}
-      className="w-20 h-20 bg-blue-500 text-white flex items-center justify-center cursor-move absolute"
+      className="w-20 h-20 bg-blue-500 text-white flex items-center justify-center cursor-move absolute z-10"
       style={{ left: `${x}px`, top: `${y}px` }}
     >
       {id}

@@ -1,0 +1,32 @@
+.pyramid {
+    clip-path: polygon(50% 0, 100% 100%, 0 100%);
+    width: 40vmin;
+    aspect-ratio: 0.7 / 1;
+    background-color: gray;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1vmin;
+    justify-items: center; /* Center horizontally */
+  }
+  .pyramid > * {
+    background: pink;
+  }
+  .one {
+    background-color: #EA1B07;
+  }
+  .two {
+    background-color: #F4B600;
+  }
+  .three {
+    background-color: #F9E029
+  }
+  .four {
+    background-color: #049DFC;
+    width: 600px;
+  }
+  .five {
+    background-color: #A77643;
+  }
+  .six {
+    background-color: #5CD533;
+  }
