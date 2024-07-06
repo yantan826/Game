@@ -4,38 +4,57 @@ import DraggableItem from "./components/DraggableItem";
 import DroppableBox from "./components/DroppableBox";
 import Pyramid from "./components/Pyramid/Pyramid";
 import { useState } from "react";
+import foodList from "./components/constant";
+// categories eat_most eat_more eat_moderate eat_less
 
 export default function App() {
-  const [items, setItems] = useState({
-    item1: { x: 20, y: 50 },
-    item2: { x: 600, y: -200 },
-  });
+  const [points, setPoints] = useState(0);
+  // get the screen width and height
+  const screenWidth = window.innerWidth;
+  const screenHeight = window.innerHeight;
+  const foodCategory = ["eat_most", "eat_more", "eat_moderate", "eat_less"];
+
+  const [items, setItems] = useState(
+    foodList.map((image, index) => ({
+      id: `item${index + 1}`, // Assuming you want to keep a unique id
+      x: Math.random() * (screenWidth / 2),
+      y: Math.random() * screenHeight * 0.8,
+      img: image.src, // Assuming each image object has a src property
+      category: image.category,
+    }))
+  );
 
   const updateItemPosition = (id, x, y) => {
-    setItems((prevItems) => ({
-      ...prevItems,
-      [id]: { x, y },
-    }));
+    setItems((prevItems) =>
+      prevItems.map((item) => (item.id === id ? { ...item, x, y } : item))
+    );
   };
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className=" min-h-screen w-screen ">
+      <div className=" h-screen w-screen flex flex-col ">
         <h1 className="text-2xl font-bold mb-4">Drag and Drop Example</h1>
-        <div className="relative h-screen w-screen bg-gray-100 flex-row-reverse flex">
+        <p>Points: {points}</p>
+        <div className="relative  w-full bg-gray-100 flex-row-reverse flex flex-grow">
           {Object.keys(items).map((id) => (
             <DraggableItem
               key={id}
-              id={id}
+              id={items[id].id}
               x={items[id].x}
               y={items[id].y}
-              updatePosition={updateItemPosition}
+              img={items[id].img}
+              category={items[id].category}
             />
-          ))} 
+          ))}
           <div className="flex flex-col">
-          <DroppableBox updateItemPosition={updateItemPosition} />
-          <DroppableBox updateItemPosition={updateItemPosition} />
-
+            {foodCategory.map((category) => (
+                <DroppableBox
+                  key={category}
+                  updateItemPosition={updateItemPosition}
+                  boxName={category}
+                  setPoints={setPoints}
+                />
+              ))}
           </div>
         </div>
       </div>
