@@ -12,7 +12,7 @@ export default function App() {
   const [points, setPoints] = useState(0);
   const screenWidth = window.innerWidth;
   const screenHeight = window.innerHeight;
-  const foodCategory = ["eat_most", "eat_more", "eat_moderate", "eat_less"];
+  const foodCategory = ["eat least", "eat moderately", "eat more", "eat most"];
 
   const [items, setItems] = useState(
     foodList.map((image, index) => ({
@@ -62,7 +62,10 @@ export default function App() {
               Food Pyramid
             </h1>
             <div className="flex-grow h-full flex">
-              <Pyramid />
+              <Pyramid 
+                updateItemPosition={updateItemPosition}
+                setPoints={setPoints}
+              />
             </div>
           </div>
           {/* <div className="flex flex-col">

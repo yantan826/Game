@@ -1,10 +1,10 @@
-import React, { useRef } from 'react';
-import { useDrop } from 'react-dnd';
-
-const DroppableBox = ({ updateItemPosition, boxName, setPoints }) => {
+import React, { useRef } from "react";
+import { useDrop } from "react-dnd";
+import { useEffect } from "react";
+const PyramidBox = ({ updateItemPosition, boxName, setPoints, className,setZBool }) => {
   const ref = useRef(null);
   const [{ isOver, canDrop }, drop] = useDrop(() => ({
-    accept: 'ITEM',
+    accept: "ITEM",
     drop: (item, monitor) => {
       const delta = monitor.getDifferenceFromInitialOffset();
       const newX = item.x + delta.x;
@@ -22,16 +22,28 @@ const DroppableBox = ({ updateItemPosition, boxName, setPoints }) => {
     }),
   }));
 
+    useEffect(() => {
+    if (canDrop) {
+      setZBool(true);
+    } else {
+      setZBool(false);
+    }
+    }, [canDrop]);
+
+
   drop(ref);
 
   return (
     <div
       ref={ref}
-      className={`w-96 flex-1 hover:z-20 border-4 border-dashed ${isOver ? 'bg-red-300' : 'bg-red-500'} ${canDrop  ? 'z-10':'z-auto'} flex items-center justify-center`}
+      className={`flex ${className} justify-center items-center
+      ${canDrop ? "z-20" : "z-auto"} 
+      ${isOver ? "opacity-30" : "opacity-100"}
+      `}
     >
-      {canDrop ? 'Release to drop' : `Drag an item here in ${boxName}`}
+     
     </div>
   );
 };
 
-export default DroppableBox;
+export default PyramidBox;
