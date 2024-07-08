@@ -1,13 +1,26 @@
 .pyramid {
     clip-path: polygon(50% 0, 100% 100%, 0 100%);
-    width: 80vmin;
-    aspect-ratio: 2.5 / 1;
-    background-color: gray;
+    top:5px;
+  left: 5px;
+  right: 5px;
+  bottom: 5px;
+  position:absolute;
+  width: 97.8%;
+  height: 99%;
     display: grid;
     grid-template-columns: 1fr;
-    gap: 1vmin;
     justify-items: center;
   }
+
+  .pyramid-container {
+    clip-path: polygon(50% 0, 100% 100%, 0 100%);
+    width: 100%;
+    height: 100%;
+    position:relative;
+    background-color: black;
+    display: flex;
+  }
+
   .pyramid > * {
     background: pink;
   }

@@ -26,22 +26,36 @@ const Pyramid = ({ updateItemPosition, setPoints }) => {
   const [zBool, setZBool] = useState(false);
 
   return (
-    <div className=" flex pyramid-container relative ">
-      <div className={`pyramid 
-        ${zBool ? "z-20" :"z-auto" }`}>
-        {pyramidLayer.map((layer) => (
-          <PyramidBox
-            key={layer.title}
-            className={layer.className}
-            boxName={layer.title}
-            updateItemPosition={updateItemPosition}
-            setPoints={setPoints}
-            setZBool={setZBool}
-          />
-        ))}
+<div className=" flex h-full w-full relative">
+      <div className={`flex pyramid-container relative ${zBool ? "z-20" :"z-auto" }`} >
+        <div className={`pyramid 
+          `}>
+          {pyramidLayer.map((layer) => (
+            <PyramidBox
+              key={layer.title}
+              className={layer.className}
+              boxName={layer.title}
+              updateItemPosition={updateItemPosition}
+              setPoints={setPoints}
+              setZBool={setZBool}
+            />
+          ))}
+        </div>
       </div>
-
-    </div>
+      <div className="absolute flex h-full right-0 ">
+        <div className="flex flex-col justify-between p-8">
+          {pyramidLayer.map((layer) => (
+            <p
+              className="text-center text-slate-800 text-lg lg:text-xl font-bold p-4 m-2 hover:text-gray-700 transition-colors duration-300"
+              key={layer.title}
+            >
+              {capitalizeFirstLetterOfAllWords(layer.title)}
+           
+            </p>
+          ))}
+        </div>
+      </div>
+</div>
   );
 };
 function capitalizeFirstLetterOfAllWords(string) {

@@ -7,12 +7,13 @@ import DroppableBox from "./components/DroppableBox";
 import { useState } from "react";
 import foodList from "./components/constant";
 import Pyramid from "./components/Pyramid/Pyramid";
+import HighScoreCounter from "./components/HighScoreCounter";
 
 export default function App() {
   const [points, setPoints] = useState(0);
   const screenWidth = window.innerWidth;
   const screenHeight = window.innerHeight;
-  const foodCategory = ["eat least", "eat moderately", "eat more", "eat most"];
+
 
   const [items, setItems] = useState(
     foodList.map((image, index) => ({
@@ -45,7 +46,10 @@ export default function App() {
     <DndProvider backend={HTML5Backend} options={{ enableMouseEvents: true }}>
       <div className="h-screen w-screen flex flex-col">
         <h1 className="text-2xl font-bold mb-4">Drag and Drop Example</h1>
-        <p>Points: {points}</p>
+        <div className="flex">
+          <p>Points: {points}</p>
+          <HighScoreCounter />
+        </div>
         <div className="relative w-full bg-gray-100 flex-row-reverse flex flex-grow">
           {items.map((item) => (
             <DraggableItem
@@ -57,12 +61,12 @@ export default function App() {
               category={item.category}
             />
           ))}
-          <div className="h-full p-8 flex flex-col">
+          <div className="h-full p-8 flex w-1/2 flex-col">
             <h1 className="text-2xl font-bold mb-4 mt-[-30px] text-center w-full">
               Food Pyramid
             </h1>
-            <div className="flex-grow h-full flex">
-              <Pyramid 
+            <div className="flex-grow h-full w-full flex">
+              <Pyramid
                 updateItemPosition={updateItemPosition}
                 setPoints={setPoints}
               />
