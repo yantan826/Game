@@ -26,7 +26,7 @@ const Pyramid = ({ updateItemPosition, setPoints }) => {
   const [zBool, setZBool] = useState(false);
 
   return (
-    <div className=" flex pyramid-container relative">
+    <div className=" flex pyramid-container relative ">
       <div className={`pyramid 
         ${zBool ? "z-20" :"z-auto" }`}>
         {pyramidLayer.map((layer) => (
@@ -40,19 +40,7 @@ const Pyramid = ({ updateItemPosition, setPoints }) => {
           />
         ))}
       </div>
-      <div className="absolute flex h-full right-0">
-        <div className="flex flex-col justify-between p-8">
-          {pyramidLayer.map((layer) => (
-            <p
-              className="text-center text-slate-800 text-lg lg:text-xl font-bold p-4 m-2 hover:text-gray-700 transition-colors duration-300"
-              key={layer.title}
-            >
-              {capitalizeFirstLetterOfAllWords(layer.title)}
-           
-            </p>
-          ))}
-        </div>
-      </div>
+
     </div>
   );
 };
