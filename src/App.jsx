@@ -9,6 +9,8 @@ import foodList from "./components/constant";
 import Pyramid from "./components/Pyramid/Pyramid";
 import HighScoreCounter from "./components/HighScoreCounter";
 import PlayerModal from "./components/PlayerModal";
+import { isMobile } from "react-device-detect";
+import HighScoreTable from "./components/HighScoreTable";
 
 import "./App.css";
 export default function App() {
@@ -16,14 +18,17 @@ export default function App() {
   const screenWidth = window.innerWidth;
   const screenHeight = window.innerHeight;
   const [modalOpen, setModalOpen] = useState(false);
+  const [name, setName] = useState("");
+  const backend = isMobile ? TouchBackend : HTML5Backend;
+
   const handleNewPlayer = () => {
     setModalOpen(true);
-  };
+  }; 
   const handleClose = () => {
     setModalOpen(false);
   };
   const handleSubmit = (name) => {
-    console.log(name);
+    setName(name.toUpperCase());
     setModalOpen(false);
   };
 
@@ -55,7 +60,7 @@ export default function App() {
   };
 
   return (
-    <DndProvider backend={HTML5Backend} options={{ enableMouseEvents: true }}>
+    <DndProvider backend={backend} options={{ enableMouseEvents: true }}>
       <div className="h-screen w-screen flex bg-black flex-col">
         <div className="flex justify-between">
           <h1 className="text-2xl font-bold p-4 title">Food Pyramid Game</h1>
@@ -71,9 +76,10 @@ export default function App() {
             />
           </div>
         </div>
-        <div className="flex rounded-b-lg bg-black justify-end px-4">
+        <div className="flex rounded-b-lg bg-black justify-between px-4">
+          <p className="bg-black  px-6 pb-3 title"> Player : {name}</p>
           <div className="flex">
-            <p className="bg-black p-2 px-6 title"> Score : </p>
+            <p className="bg-black  px-6 title"> Score : </p>
             <HighScoreCounter />
           </div>
         </div>
@@ -88,14 +94,19 @@ export default function App() {
               category={item.category}
             />
           ))}
-          <div className="h-full p-8 flex w-1/2 flex-col">
+          <div className="absolute left-0 bottom-0 table">
+            <HighScoreTable />
+
+          </div>
+          <div className="h-full p-8 flex w-1/2 flex-col relative">
             <h1 className="text-2xl font-bold mb-4 mt-[-30px] text-center w-full">
               Food Pyramid
             </h1>
-            <div className="flex-grow h-full w-full flex">
+            <div className="flex-grow h-full w-full flex ">
               <Pyramid
                 updateItemPosition={updateItemPosition}
                 setPoints={setPoints}
+                points={points}
               />
             </div>
           </div>
@@ -115,3 +126,5 @@ export default function App() {
     </DndProvider>
   );
 }
+
+

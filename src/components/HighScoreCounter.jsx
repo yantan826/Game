@@ -27,7 +27,6 @@ const HighScoreCounter = () => {
         width: '200px',
         backgroundColor: 'black',
         borderRadius: '0 10px 10px 0', // Border radius on the right side only
-        padding: '0.5rem',
       }}
       fontSize="30px" />
     </div>

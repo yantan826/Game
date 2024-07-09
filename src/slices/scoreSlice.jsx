@@ -15,7 +15,7 @@ const highScoresExample = [
     },
     {
         name: "Jane Smith",
-        score: 70000,
+        score: 710000,
     }
 ];
 
@@ -35,11 +35,21 @@ export const scoreSlice = createSlice({
         resetScore: (state) => {
             state.initialScore = 100000;
         },
+        addHighScore: (state, action) => {
+            state.highScores.push(action.payload);
+            state.highScores.sort((a, b) => b.score - a.score);
+            state.highScores = state.highScores.slice(0, 5);
+            localStorage.setItem("highScores", JSON.stringify(state.highScores));
+        },
     },
 });
 
-export const { updateScore, resetScore } = scoreSlice.actions;
+export const { updateScore,
+     resetScore,
+    
+    } = scoreSlice.actions;
 
 export const selectScore = (state) => state.score.initialScore;
+export const selectHighScores = (state) => state.score.highScores;
 
 export default scoreSlice.reducer;

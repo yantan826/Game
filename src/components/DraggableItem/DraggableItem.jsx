@@ -30,7 +30,7 @@ const DraggableItem = ({ id, x, y, img, category }) => {
   return (
     <div
       ref={ref}
-      className="w-20 h-20 dragbox text-white flex items-center justify-center absolute z-10"
+      className="w-20 h-20 dragbox text-white flex dragbox items-center justify-center absolute z-20"
       style={{ left: `${x}px`, top: `${y}px`, cursor: isDragging ? 'grabbing' : 'grab' }}
     >
       <img src={img} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />

@@ -9,6 +9,9 @@ p{
   font-size: 15px;
   color: #4bf30c; /* Adjust the color as needed */
 }
+.table{
+  color:#4bf30c
+}
 
 * {
   box-sizing: border-box;

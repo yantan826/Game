@@ -26,10 +26,12 @@ const Pyramid = ({ updateItemPosition, setPoints }) => {
   const [zBool, setZBool] = useState(false);
 
   return (
-<div className=" flex h-full w-full relative">
-      <div className={`flex pyramid-container relative ${zBool ? "z-20" :"z-auto" }`} >
-        <div className={`pyramid 
-          `}>
+    <div className=" flex h-full w-full relative">
+      <div className={`flex pyramid-container relative z-auto ${zBool? "z-40":"z-auto"} `}>
+        <div
+          className={`pyramid 
+          `}
+        >
           {pyramidLayer.map((layer) => (
             <PyramidBox
               key={layer.title}
@@ -42,23 +44,27 @@ const Pyramid = ({ updateItemPosition, setPoints }) => {
           ))}
         </div>
       </div>
-      <div className="absolute flex h-full right-0 ">
-        <div className="flex flex-col justify-between p-8">
-          {pyramidLayer.map((layer) => (
-            <p
-              className="text-center text-slate-800 font-bold p-4 m-2 hover:text-gray-700 transition-colors duration-300"
-              key={layer.title}
-            >
-              {capitalizeFirstLetterOfAllWords(layer.title)}
-           
-            </p>
-          ))}
-        </div>
+      <div className={`absolute flex h-full right-0`}>
+        {!zBool && (
+          <div className={`flex flex-col justify-between p-8`}>
+            {pyramidLayer.map((layer) => (
+              <p
+                className="text-center text-slate-800 font-bold p-4 m-2 hover:text-gray-700 transition-colors duration-300"
+                key={layer.title}
+              >
+                {capitalizeFirstLetterOfAllWords(layer.title)}
+              </p>
+            ))}
+          </div>
+        )}
       </div>
-</div>
+    </div>
   );
 };
 function capitalizeFirstLetterOfAllWords(string) {
-  return string.split(" ").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
+  return string
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
 }
 export default Pyramid;

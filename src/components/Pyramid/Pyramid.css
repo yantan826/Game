@@ -44,3 +44,10 @@
   .one, .two, .three, .four {
     border: 2px solid rgb(92, 49, 49); /* Adjust the color and size as needed */
   }
+
+  
+/* Ensure draggable items are above the pyramid */
+.dragbox {
+  z-index: 10;
+  pointer-events: auto;
+}
