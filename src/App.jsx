@@ -8,18 +8,30 @@ import { useState } from "react";
 import foodList from "./components/constant";
 import Pyramid from "./components/Pyramid/Pyramid";
 import HighScoreCounter from "./components/HighScoreCounter";
+import PlayerModal from "./components/PlayerModal";
 
+import "./App.css";
 export default function App() {
   const [points, setPoints] = useState(0);
   const screenWidth = window.innerWidth;
   const screenHeight = window.innerHeight;
-
+  const [modalOpen, setModalOpen] = useState(false);
+  const handleNewPlayer = () => {
+    setModalOpen(true);
+  };
+  const handleClose = () => {
+    setModalOpen(false);
+  };
+  const handleSubmit = (name) => {
+    console.log(name);
+    setModalOpen(false);
+  };
 
   const [items, setItems] = useState(
     foodList.map((image, index) => ({
       id: `item${index + 1}`,
       x: Math.random() * (screenWidth / 2),
-      y: Math.random() * screenHeight * 0.8,
+      y: Math.random() * screenHeight * 0.6,
       img: image.src,
       category: image.category,
     }))
@@ -44,11 +56,26 @@ export default function App() {
 
   return (
     <DndProvider backend={HTML5Backend} options={{ enableMouseEvents: true }}>
-      <div className="h-screen w-screen flex flex-col">
-        <h1 className="text-2xl font-bold mb-4">Drag and Drop Example</h1>
-        <div className="flex">
-          <p>Points: {points}</p>
-          <HighScoreCounter />
+      <div className="h-screen w-screen flex bg-black flex-col">
+        <div className="flex justify-between">
+          <h1 className="text-2xl font-bold p-4 title">Food Pyramid Game</h1>
+          {/* new player */}
+          <div className="flex justify-end me-3  ">
+            <button className="new-player-btn" onClick={handleNewPlayer}>
+              <span className="arrow mt-[-8px] me-3">→</span> New Player
+            </button>
+            <PlayerModal
+              isOpen={modalOpen}
+              onClose={handleClose}
+              onSubmit={handleSubmit}
+            />
+          </div>
+        </div>
+        <div className="flex rounded-b-lg bg-black justify-end px-4">
+          <div className="flex">
+            <p className="bg-black p-2 px-6 title"> Score : </p>
+            <HighScoreCounter />
+          </div>
         </div>
         <div className="relative w-full bg-gray-100 flex-row-reverse flex flex-grow">
           {items.map((item) => (

@@ -1,7 +1,7 @@
 .pyramid {
     clip-path: polygon(50% 0, 100% 100%, 0 100%);
     top:5px;
-  left: 5px;
+  left: 7px;
   right: 5px;
   bottom: 5px;
   position:absolute;

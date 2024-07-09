@@ -1,20 +1,35 @@
 import React, { useEffect, useState } from 'react';
 import { AnimatedCounter } from 'react-animated-counter';
+import { useSelector, useDispatch  } from 'react-redux'; // Import useSelector
 
+import { selectScore ,updateScore } from '../slices/scoreSlice';
 const HighScoreCounter = () => {
-  const [counterValue, setCounterValue] = useState(10000);
-
+  const newScore = useSelector(selectScore); // Use useSelector to call selectScore
+  const dispatch = useDispatch(); // Use useDispatch to call updateScore
   useEffect(() => {
     const interval = setInterval(() => {
-      setCounterValue((prevValue) => prevValue - 12);
-    }, 100); // Increase by 100 every 1000 milliseconds (1 second)
-
-    return () => clearInterval(interval); // Cleanup on component unmount
-  }, []);
+      dispatch(updateScore(newScore -9));
+    }, 100);
+    return () => clearInterval(interval);
+  }
+  , [newScore]);
 
   return (
     <div>
-      <AnimatedCounter value={counterValue} color="black" fontSize="40px" />
+      <AnimatedCounter value={newScore} color="black" 
+      includeCommas={true}
+      includeDecimals={false}
+      digitStyles={{
+        color: 'white',
+        fontFamily: '"Press Start 2P", cursive', // Arcade-style font
+      }}
+      containerStyles={{  
+        width: '200px',
+        backgroundColor: 'black',
+        borderRadius: '0 10px 10px 0', // Border radius on the right side only
+        padding: '0.5rem',
+      }}
+      fontSize="30px" />
     </div>
   );
 };
