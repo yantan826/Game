@@ -1,8 +1,19 @@
-import React, { useRef } from "react";
+import React, { useRef,useEffect } from "react";
 import { useDrop } from "react-dnd";
-import { useEffect } from "react";
-const PyramidBox = ({ updateItemPosition, boxName, setPoints, className,setZBool }) => {
+import { useDispatch } from "react-redux";
+import { addItemList } from "../../slices/scoreSlice";
+import store from "../../store";
+const PyramidBox = ({
+  updateItemPosition,
+  boxName,
+  setPoints,
+  className,
+  setZBool,
+  onGameOver,
+}) => {
+  const dispatch = useDispatch();
   const ref = useRef(null);
+
   const [{ isOver, canDrop }, drop] = useDrop(() => ({
     accept: "ITEM",
     drop: (item, monitor) => {
@@ -10,10 +21,19 @@ const PyramidBox = ({ updateItemPosition, boxName, setPoints, className,setZBool
       const newX = item.x + delta.x;
       const newY = item.y + delta.y;
       updateItemPosition(item.id, newX, newY);
-      if (boxName === item.category) {
-        setPoints((prevPoints) => prevPoints + 1);
-      } else {
-        setPoints((prevPoints) => prevPoints - 1);
+      const latestItemList = store.getState().score.itemList;
+      console.log("itemList2", latestItemList);
+
+      if (!latestItemList.includes(item.id)) {
+        if (boxName === item.category) {
+          setPoints((prevPoints) => prevPoints + 1000);
+        } else {
+          setPoints((prevPoints) => prevPoints - 1000);
+        }
+        dispatch(addItemList(item.id));
+      }
+      if (latestItemList.length + 1 === 21) {
+        onGameOver();
       }
     },
     collect: (monitor) => ({
@@ -22,14 +42,13 @@ const PyramidBox = ({ updateItemPosition, boxName, setPoints, className,setZBool
     }),
   }));
 
-    useEffect(() => {
+  useEffect(() => {
     if (canDrop) {
       setZBool(true);
     } else {
       setZBool(false);
     }
-    }, [canDrop]);
-
+  }, [canDrop]);
 
   drop(ref);
 
@@ -37,12 +56,10 @@ const PyramidBox = ({ updateItemPosition, boxName, setPoints, className,setZBool
     <div
       ref={ref}
       className={`flex ${className} justify-center items-center
-      ${canDrop ? "z-20" : "z-auto"} 
+      ${canDrop ? "z-50" : "z-auto"} 
       ${isOver ? "opacity-30" : "opacity-100"}
       `}
-    >
-     
-    </div>
+    ></div>
   );
 };
 

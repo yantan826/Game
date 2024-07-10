@@ -27,10 +27,9 @@ const Pyramid = ({ updateItemPosition, setPoints }) => {
 
   return (
     <div className=" flex h-full w-full relative">
-      <div className={`flex pyramid-container relative z-auto ${zBool? "z-40":"z-auto"} `}>
+      <div className={`flex pyramid-container relative ${zBool? "z-50":"z-auto"} `}>
         <div
-          className={`pyramid 
-          `}
+          className={`pyramid ${zBool? "z-50":"z-auto"}`}
         >
           {pyramidLayer.map((layer) => (
             <PyramidBox

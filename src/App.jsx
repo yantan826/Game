@@ -14,7 +14,7 @@ import HighScoreTable from "./components/HighScoreTable";
 
 import "./App.css";
 export default function App() {
-  const [points, setPoints] = useState(0);
+  const [points, setPoints] = useState(10000);
   const screenWidth = window.innerWidth;
   const screenHeight = window.innerHeight;
   const [modalOpen, setModalOpen] = useState(false);
@@ -80,7 +80,10 @@ export default function App() {
           <p className="bg-black  px-6 pb-3 title"> Player : {name}</p>
           <div className="flex">
             <p className="bg-black  px-6 title"> Score : </p>
-            <HighScoreCounter />
+            <HighScoreCounter
+                points={points}
+                setPoints={setPoints}
+            />
           </div>
         </div>
         <div className="relative w-full bg-gray-100 flex-row-reverse flex flex-grow">

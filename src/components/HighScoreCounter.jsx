@@ -1,22 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { AnimatedCounter } from 'react-animated-counter';
-import { useSelector, useDispatch  } from 'react-redux'; // Import useSelector
+const HighScoreCounter = ({points, setPoints}) => {
 
-import { selectScore ,updateScore } from '../slices/scoreSlice';
-const HighScoreCounter = () => {
-  const newScore = useSelector(selectScore); // Use useSelector to call selectScore
-  const dispatch = useDispatch(); // Use useDispatch to call updateScore
   useEffect(() => {
     const interval = setInterval(() => {
-      dispatch(updateScore(newScore -9));
+      setPoints((prevPoints) => prevPoints -15);
     }, 100);
     return () => clearInterval(interval);
   }
-  , [newScore]);
+  , [setPoints]);
 
   return (
     <div>
-      <AnimatedCounter value={newScore} color="black" 
+      <AnimatedCounter value={points} color="black" 
       includeCommas={true}
       includeDecimals={false}
       digitStyles={{

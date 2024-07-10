@@ -23,6 +23,7 @@ const highScoresExample = [
 const initialState = {
     initialScore: 100000,
     highScores: localStorage.getItem("highScores") ? JSON.parse(localStorage.getItem("highScores")) : highScoresExample,
+    itemList : []
 };
 
 export const scoreSlice = createSlice({
@@ -41,12 +42,16 @@ export const scoreSlice = createSlice({
             state.highScores = state.highScores.slice(0, 5);
             localStorage.setItem("highScores", JSON.stringify(state.highScores));
         },
+        addItemList: (state, action) => {
+            state.itemList.push(action.payload);
+        },
     },
 });
 
 export const { updateScore,
      resetScore,
-    
+    addItemList,
+    addHighScore
     } = scoreSlice.actions;
 
 export const selectScore = (state) => state.score.initialScore;
