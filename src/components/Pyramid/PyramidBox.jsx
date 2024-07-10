@@ -32,7 +32,8 @@ const PyramidBox = ({
         }
         dispatch(addItemList(item.id));
       }
-      if (latestItemList.length + 1 === 21) {
+      console.log(latestItemList.length + 1, "length")
+      if (latestItemList.length + 1 === 2) {
         onGameOver();
       }
     },

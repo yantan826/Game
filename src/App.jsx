@@ -4,17 +4,20 @@ import { TouchBackend } from "react-dnd-touch-backend";
 import { Preview } from "react-dnd-preview";
 import DraggableItem from "./components/DraggableItem/DraggableItem";
 import DroppableBox from "./components/DroppableBox";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import foodList from "./components/constant";
 import Pyramid from "./components/Pyramid/Pyramid";
 import HighScoreCounter from "./components/HighScoreCounter";
 import PlayerModal from "./components/PlayerModal";
 import { isMobile } from "react-device-detect";
 import HighScoreTable from "./components/HighScoreTable";
-
+import { useDispatch } from "react-redux";
+import { addHighScore } from "./slices/scoreSlice";
 import "./App.css";
 export default function App() {
-  const [points, setPoints] = useState(10000);
+  const dispatch = useDispatch();
+  const [gameOver, setGameOver] = useState(false);
+  const [points, setPoints] = useState(100000);
   const screenWidth = window.innerWidth;
   const screenHeight = window.innerHeight;
   const [modalOpen, setModalOpen] = useState(false);
@@ -23,14 +26,29 @@ export default function App() {
 
   const handleNewPlayer = () => {
     setModalOpen(true);
-  }; 
+  };
   const handleClose = () => {
     setModalOpen(false);
   };
   const handleSubmit = (name) => {
+    console.log(name);
     setName(name.toUpperCase());
     setModalOpen(false);
   };
+
+  const handleGameOver = () => {
+    setGameOver(true);
+  };
+
+  useEffect(() => {
+    if (gameOver) {
+      dispatch(addHighScore({ name, score: points }));
+    }
+    if (!name){
+      setModalOpen(true);
+    }
+  
+  }, [gameOver, points, name, dispatch]);
 
   const [items, setItems] = useState(
     foodList.map((image, index) => ({
@@ -59,6 +77,16 @@ export default function App() {
     );
   };
 
+  if (gameOver) {
+    return (
+      <div className="game-over-screen">
+        <h1>Game Over</h1>
+        <p>Your score: {points}</p>
+        <button onClick={() => window.location.reload()}>Restart</button>
+      </div>
+    );
+  }
+
   return (
     <DndProvider backend={backend} options={{ enableMouseEvents: true }}>
       <div className="h-screen w-screen flex bg-black flex-col">
@@ -80,10 +108,7 @@ export default function App() {
           <p className="bg-black  px-6 pb-3 title"> Player : {name}</p>
           <div className="flex">
             <p className="bg-black  px-6 title"> Score : </p>
-            <HighScoreCounter
-                points={points}
-                setPoints={setPoints}
-            />
+            <HighScoreCounter points={points} setPoints={setPoints} name={name}/>
           </div>
         </div>
         <div className="relative w-full bg-gray-100 flex-row-reverse flex flex-grow">
@@ -99,7 +124,6 @@ export default function App() {
           ))}
           <div className="absolute left-0 bottom-0 table">
             <HighScoreTable />
-
           </div>
           <div className="h-full p-8 flex w-1/2 flex-col relative">
             <h1 className="text-2xl font-bold mb-4 mt-[-30px] text-center w-full">
@@ -110,6 +134,8 @@ export default function App() {
                 updateItemPosition={updateItemPosition}
                 setPoints={setPoints}
                 points={points}
+                onGameOver={handleGameOver}
+
               />
             </div>
           </div>
@@ -129,5 +155,3 @@ export default function App() {
     </DndProvider>
   );
 }
-
-

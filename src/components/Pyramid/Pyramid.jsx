@@ -22,7 +22,7 @@ const pyramidLayer = [
   },
 ];
 
-const Pyramid = ({ updateItemPosition, setPoints }) => {
+const Pyramid = ({ updateItemPosition, setPoints,onGameOver }) => {
   const [zBool, setZBool] = useState(false);
 
   return (
@@ -39,6 +39,7 @@ const Pyramid = ({ updateItemPosition, setPoints }) => {
               updateItemPosition={updateItemPosition}
               setPoints={setPoints}
               setZBool={setZBool}
+              onGameOver={onGameOver}
             />
           ))}
         </div>

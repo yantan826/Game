@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { AnimatedCounter } from 'react-animated-counter';
-const HighScoreCounter = ({points, setPoints}) => {
+const HighScoreCounter = ({points, setPoints,name}) => {
 
   useEffect(() => {
+    if (!name) return; // Stop if no name
+
     const interval = setInterval(() => {
       setPoints((prevPoints) => prevPoints -15);
     }, 100);
     return () => clearInterval(interval);
   }
-  , [setPoints]);
+  , [name,setPoints]);
 
   return (
     <div>

@@ -1,7 +1,8 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef,useState } from 'react';
 
 const PlayerModal = ({ isOpen, onClose, onSubmit }) => {
   const modalRef = useRef();
+  const [name, setName] = useState('');
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -25,7 +26,7 @@ const PlayerModal = ({ isOpen, onClose, onSubmit }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(inputName);
+    onSubmit(name);
   };
 
   return (
@@ -36,7 +37,7 @@ const PlayerModal = ({ isOpen, onClose, onSubmit }) => {
           <input
             type="text"
             id="name"
-            onChange={(e) => inputName = e.target.value}
+            onChange={(e) => setName(e.target.value)}
             className="border-2 border-gray-300"
           />
           <button type="submit" className="bg-blue-500 text-white p-2">Submit</button>
