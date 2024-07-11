@@ -6,7 +6,7 @@ const HighScoreCounter = ({points, setPoints,name}) => {
   const [countdown, setCountdown] = useState(0);
 
   const playCountdownSound = () => {
-    const audio = new Audio('/public/sounds/countdown.wav');
+    const audio = new Audio('/sounds/countdown.wav');
     audio.play();
   }
 

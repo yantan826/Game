@@ -14,12 +14,12 @@ const PyramidBox = ({
 }) => {
   const dispatch = useDispatch();
   const playDropRightSound = () => {
-    const sound = new Audio("/public/sounds/unlock.wav");
+    const sound = new Audio("/sounds/unlock.wav");
     sound.play();
   };
 
   const playDropWrongSound = () => {
-    const sound = new Audio("/public/sounds/fail2.wav");
+    const sound = new Audio("/sounds/fail2.wav");
     sound.play();
   };
 

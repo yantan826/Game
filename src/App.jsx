@@ -15,7 +15,7 @@ import { useDispatch } from "react-redux";
 import { addHighScore } from "./slices/scoreSlice";
 import "./App.css";
 
-const gameOverSound = new Audio("/public/sounds/gameover.wav");
+const gameOverSound = new Audio("/sounds/gameover.wav");
 export default function App() {
   const dispatch = useDispatch();
   const [gameOver, setGameOver] = useState(false);
