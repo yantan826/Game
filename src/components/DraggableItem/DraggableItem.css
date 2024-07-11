@@ -4,3 +4,7 @@
         cursor: move !important;
     }
 }
+
+.dragbox {
+    touch-action: none  ;
+}
