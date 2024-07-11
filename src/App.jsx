@@ -7,13 +7,15 @@ import DroppableBox from "./components/DroppableBox";
 import { useState,useEffect } from "react";
 import foodList from "./components/constant";
 import Pyramid from "./components/Pyramid/Pyramid";
-import HighScoreCounter from "./components/HighScoreCounter";
+import HighScoreCounter from "./components/HighScoreCounter/HighScoreCounter";
 import PlayerModal from "./components/PlayerModal";
 import { isMobile } from "react-device-detect";
 import HighScoreTable from "./components/HighScoreTable";
 import { useDispatch } from "react-redux";
 import { addHighScore } from "./slices/scoreSlice";
 import "./App.css";
+
+const gameOverSound = new Audio("/public/sounds/gameover.wav");
 export default function App() {
   const dispatch = useDispatch();
   const [gameOver, setGameOver] = useState(false);
@@ -25,6 +27,7 @@ export default function App() {
   const backend = isMobile ? TouchBackend : HTML5Backend;
 
   const handleNewPlayer = () => {
+    setPoints(100000);
     setModalOpen(true);
   };
   const handleClose = () => {
@@ -43,6 +46,7 @@ export default function App() {
   useEffect(() => {
     if (gameOver) {
       dispatch(addHighScore({ name, score: points }));
+      gameOverSound.play();
     }
     if (!name){
       setModalOpen(true);

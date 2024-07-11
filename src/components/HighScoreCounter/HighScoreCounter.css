@@ -1,0 +1,16 @@
+.countdown {
+    position: fixed; /* Position it fixed in the viewport */
+    top: 0; /* Stretch to the top edge */
+    right: 0; /* Stretch to the right edge */
+    bottom: 0; /* Stretch to the bottom edge */
+    left: 0; /* Stretch to the left edge */
+    background-color: rgba(0, 0, 0, 0.7); /* Slightly opaque background */
+    color: white; /* Text color */
+    font-size: 5rem; /* Large text size */
+    font-family: 'Press Start 2P', cursive; /* Arcade-style font */
+    padding: 20px; /* Some padding for spacing */
+    display: flex; /* Use flexbox for centering */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    z-index: 9999; /* Ensure it's on top of other elements */
+}
