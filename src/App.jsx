@@ -24,7 +24,7 @@ export default function App() {
   const screenHeight = window.innerHeight;
   const [modalOpen, setModalOpen] = useState(false);
   const [name, setName] = useState("");
-  const backend = isMobile ? TouchBackend : HTML5Backend;
+  const backend = isMobile ?  TouchBackend({ enableMouseEvents: true }) : HTML5Backend;
 
   const handleNewPlayer = () => {
     setPoints(100000);
