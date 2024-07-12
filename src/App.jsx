@@ -24,7 +24,7 @@ export default function App() {
   const screenHeight = window.innerHeight;
   const [modalOpen, setModalOpen] = useState(false);
   const [name, setName] = useState("");
-  const backend = isMobile ?  TouchBackend({ enableMouseEvents: false , scrollAngleRanges:[]}) : HTML5Backend;
+  const backend = isMobile ? TouchBackend : HTML5Backend;
 
   const handleNewPlayer = () => {
     setPoints(100000);
@@ -92,7 +92,7 @@ export default function App() {
   }
 
   return (
-    <DndProvider backend={backend} options={{ enableMouseEvents: true }}>
+    <DndProvider backend={backend} options={{ enableMouseEvents: false }}>
       <div className="h-screen w-screen flex bg-black flex-col">
         <div className="flex justify-between">
           <h1 className="text-2xl font-bold p-4 title">Food Pyramid Game</h1>
