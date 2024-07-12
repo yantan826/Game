@@ -70,6 +70,34 @@ export default function App() {
     );
   };
 
+  useEffect(() => {
+    if (isMobile) {
+      const preventDefault = (e) => e.preventDefault();
+
+      const enableScroll = () => {
+        document.removeEventListener('touchmove', preventDefault, { passive: false });
+      };
+
+      const disableScroll = () => {
+        document.addEventListener('touchmove', preventDefault, { passive: false });
+      };
+
+      // Enable scroll by default
+      enableScroll();
+
+      // Disable scroll on drag start
+      document.addEventListener('dragstart', disableScroll);
+
+      // Enable scroll on drag end
+      document.addEventListener('dragend', enableScroll);
+
+      return () => {
+        document.removeEventListener('dragstart', disableScroll);
+        document.removeEventListener('dragend', enableScroll);
+      };
+    }
+  }, []);
+
   const generatePreview = ({ itemType, item, style }) => {
     return (
       <div style={{ ...style, height: "80px", width: "80px" }}>
