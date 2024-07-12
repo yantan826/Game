@@ -92,7 +92,7 @@ export default function App() {
   }
 
   return (
-    <DndProvider backend={backend} options={{ enableMouseEvents: false }}>
+    <DndProvider backend={backend} options={{ enableMouseEvents: false, scrollAngleRanges:[] }}>
       <div className="h-screen w-screen flex bg-black flex-col">
         <div className="flex justify-between">
           <h1 className="text-2xl font-bold p-4 title">Food Pyramid Game</h1>
