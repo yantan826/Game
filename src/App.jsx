@@ -9,15 +9,17 @@ import HighScoreCounter from "./components/HighScoreCounter/HighScoreCounter";
 import PlayerModal from "./components/PlayerModal";
 import HighScoreTable from "./components/HighScoreTable";
 import { useDispatch } from "react-redux";
-import { addHighScore } from "./slices/scoreSlice";
+import { addHighScore,setSounds } from "./slices/scoreSlice";
 import { isMobile } from "react-device-detect";
 import foodList from "./components/constant";
 import "./App.css";
+import GameOver from "./components/GameOver";
 
-const gameOverSound = new Audio("/sounds/gameover.wav");
 
 export default function App() {
   const dispatch = useDispatch();
+  const [gameOverSound, setGameOverSound] = useState(new Audio("/sounds/gameover.wav"));
+
   const [gameOver, setGameOver] = useState(false);
   const [points, setPoints] = useState(100000);
   const screenWidth = window.innerWidth;
@@ -25,7 +27,7 @@ export default function App() {
   const [modalOpen, setModalOpen] = useState(false);
   const [name, setName] = useState("");
   const backend = isMobile ? TouchBackend : HTML5Backend;
-
+  const [isHighestScore, setIsHighestScore] = useState(false);
   const handleNewPlayer = () => {
     setPoints(100000);
     setModalOpen(true);
@@ -36,7 +38,7 @@ export default function App() {
   };
 
   const handleSubmit = (name) => {
-    console.log(name);
+    dispatch(setSounds(true));
     setName(name.toUpperCase());
     setModalOpen(false);
   };
@@ -45,15 +47,7 @@ export default function App() {
     setGameOver(true);
   };
 
-  useEffect(() => {
-    if (gameOver) {
-      dispatch(addHighScore({ name, score: points }));
-      gameOverSound.play();
-    }
-    if (!name) {
-      setModalOpen(true);
-    }
-  }, [gameOver, points, name, dispatch]);
+
 
   const [items, setItems] = useState(
     foodList.map((image, index) => ({
@@ -70,17 +64,28 @@ export default function App() {
       prevItems.map((item) => (item.id === id ? { ...item, x, y } : item))
     );
   };
+  useEffect(() => {
+    gameOverSound.load(); // Preload the audio file
+  }, []);
 
+  const playGameOverSound = () => {
+    gameOverSound.currentTime = 0; // Reset sound to start
+    gameOverSound.play();
+  };
   useEffect(() => {
     if (isMobile) {
       const preventDefault = (e) => e.preventDefault();
 
       const enableScroll = () => {
-        document.removeEventListener('touchmove', preventDefault, { passive: false });
+        document.removeEventListener("touchmove", preventDefault, {
+          passive: false,
+        });
       };
 
       const disableScroll = () => {
-        document.addEventListener('touchmove', preventDefault, { passive: false });
+        document.addEventListener("touchmove", preventDefault, {
+          passive: false,
+        });
       };
 
       const handleDragStart = () => {
@@ -95,15 +100,25 @@ export default function App() {
       enableScroll();
 
       // Disable scroll on drag start
-      document.addEventListener('dragstart', handleDragStart);
-      document.addEventListener('dragend', handleDragEnd);
+      document.addEventListener("dragstart", handleDragStart);
+      document.addEventListener("dragend", handleDragEnd);
 
       return () => {
-        document.removeEventListener('dragstart', handleDragStart);
-        document.removeEventListener('dragend', handleDragEnd);
+        document.removeEventListener("dragstart", handleDragStart);
+        document.removeEventListener("dragend", handleDragEnd);
       };
     }
   }, []);
+
+  useEffect(() => {
+    if (gameOver) {
+      dispatch(addHighScore({ name, score: points }));
+      playGameOverSound();
+    }
+    if (!name) {
+      setModalOpen(true);
+    }
+  }, [gameOver, points, name, dispatch]);
 
   const generatePreview = ({ itemType, item, style }) => {
     return (
@@ -117,13 +132,9 @@ export default function App() {
   };
 
   if (gameOver) {
-    return (
-      <div className="game-over-screen">
-        <h1>Game Over</h1>
-        <p>Your score: {points}</p>
-        <button onClick={() => window.location.reload()}>Restart</button>
-      </div>
-    );
+    return <GameOver points={points}
+      setIsHighestScore={setIsHighestScore}
+    />;
   }
 
   return (
@@ -146,7 +157,11 @@ export default function App() {
           <p className="bg-black px-6 pb-3 title">Player: {name}</p>
           <div className="flex">
             <p className="bg-black px-6 title">Score:</p>
-            <HighScoreCounter points={points} setPoints={setPoints} name={name} />
+            <HighScoreCounter
+              points={points}
+              setPoints={setPoints}
+              name={name}
+            />
           </div>
         </div>
         <div className="relative w-full bg-gray-100 flex-row-reverse flex flex-grow">

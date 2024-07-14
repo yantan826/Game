@@ -1,8 +1,7 @@
-import React, { useRef,useEffect,useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { useDrop } from "react-dnd";
 import { useDispatch } from "react-redux";
-import { addItemList,selectSounds } from "../../slices/scoreSlice";
-import { useSelector } from "react-redux";
+import { addItemList } from "../../slices/scoreSlice";
 import store from "../../store";
 
 const PyramidBox = ({
@@ -14,9 +13,10 @@ const PyramidBox = ({
   onGameOver,
 }) => {
   const dispatch = useDispatch();
-  const soundEnabled  = useSelector(selectSounds);
+
   const dropRightSoundRef = useRef(null);
   const dropWrongSoundRef = useRef(null);
+  const [soundsEnabled, setSoundsEnabled] = useState(false);
 
   const initializeSounds = () => {
     dropRightSoundRef.current = new Audio("/sounds/unlock.wav");
@@ -34,27 +34,39 @@ const PyramidBox = ({
 
     loadSound(dropRightSoundRef);
     loadSound(dropWrongSoundRef);
+    setSoundsEnabled(true);
   };
 
+  const handleUserInteraction = () => {
+    initializeSounds();
+    document.removeEventListener("click", handleUserInteraction);
+  };
 
   useEffect(() => {
-    if(soundEnabled){
-      initializeSounds();
-    }
-  }, [soundEnabled]);
+    document.addEventListener("click", handleUserInteraction);
+    return () => {
+      document.removeEventListener("click", handleUserInteraction);
+    };
+  }, []);
 
   const playDropRightSound = () => {
-    const sound = new Audio("/sounds/unlock.wav");
-    sound.play();
+    if (soundsEnabled) {
+      dropRightSoundRef.current.play().catch((error) => {
+        console.error("Play drop right sound failed:", error);
+      });
+    }
   };
 
   const playDropWrongSound = () => {
-    const sound = new Audio("/sounds/fail2.wav");
-    sound.play();
+    if (soundsEnabled) {
+      dropWrongSoundRef.current.play().catch((error) => {
+        console.error("Play drop wrong sound failed:", error);
+      });
+    }
   };
 
   const ref = useRef(null);
-  const [pointsDisplay, setPointsDisplay] =  useState({ message: '', visible: false });
+  const [pointsDisplay, setPointsDisplay] = useState({ message: '', visible: false });
   const [{ isOver, canDrop }, drop] = useDrop(() => ({
     accept: "ITEM",
     drop: (item, monitor) => {
@@ -76,8 +88,7 @@ const PyramidBox = ({
         }
         dispatch(addItemList(item.id));
       }
-      console.log(latestItemList.length + 1, "length")
-      if (latestItemList.length + 1 === 21) {
+      if (latestItemList.length + 1 === 5) {
         onGameOver();
       }
     },
@@ -103,26 +114,35 @@ const PyramidBox = ({
 
       return () => clearTimeout(timer); // Cleanup timeout
     }
-  }, [pointsDisplay.visible]); //
+  }, [pointsDisplay.visible]);
 
   drop(ref);
 
   return (
-    <div ref={ref} className={`flex ${className} justify-center items-center relative ${canDrop ? "z-50" : "z-auto"} ${isOver ? "opacity-30" : "opacity-100"}`}>
-    {pointsDisplay.visible && (
-      <div style={{ 
-        color: pointsDisplay.message.startsWith('-') ? 'red' : 'green', 
-        position: 'absolute', 
-        transition: 'opacity 1s' ,
-        fontSize: '1.5rem',
-        zIndex: 100,
-        bottom: '0px',
-
-      }}>
-        {pointsDisplay.message}
+    <div className="relative">
+      {!soundsEnabled && (
+        <button 
+          onClick={initializeSounds} 
+          className="absolute top-0 left-0 z-50 p-2 bg-blue-500 text-white"
+        >
+          Enable Sounds
+        </button>
+      )}
+      <div ref={ref} className={`flex ${className} justify-center items-center relative ${canDrop ? "z-50" : "z-auto"} ${isOver ? "opacity-30" : "opacity-100"}`}>
+        {pointsDisplay.visible && (
+          <div style={{ 
+            color: pointsDisplay.message.startsWith('-') ? 'red' : 'green', 
+            position: 'absolute', 
+            transition: 'opacity 1s',
+            fontSize: '1.5rem',
+            zIndex: 100,
+            bottom: '0px',
+          }}>
+            {pointsDisplay.message}
+          </div>
+        )}
       </div>
-    )}
-  </div>
+    </div>
   );
 };
 
