@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const highScoresExample = [
     {
         name: "John Doe",
-        score: 100000,
+        score: 90000,
     },
     {
         name: "Jane Doe",
@@ -25,6 +25,7 @@ const initialState = {
     highScores: localStorage.getItem("highScores") ? JSON.parse(localStorage.getItem("highScores")) : highScoresExample,
     itemList : [],
     sounds:false,
+    highestScorePersonDetails: localStorage.getItem("highestScorePersonDetails") ? JSON.parse(localStorage.getItem("highestScorePersonDetails")) : "null"
 };
 
 export const scoreSlice = createSlice({
@@ -48,6 +49,10 @@ export const scoreSlice = createSlice({
         },
         setSounds: (state, action) => {
             state.sounds = action.payload;
+        },
+        updateHighestScorePersonDetails: (state, action) => {
+            state.highestScorePersonDetails = action.payload;
+            localStorage.setItem("highestScorePersonDetails", JSON.stringify(state.highestScorePersonDetails));
         }
 
     },
@@ -57,7 +62,8 @@ export const { updateScore,
      resetScore,
     addItemList,
     addHighScore,
-    setSounds
+    setSounds,
+    updateHighestScorePersonDetails
     } = scoreSlice.actions;
 
 export const selectScore = (state) => state.score.initialScore;

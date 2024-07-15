@@ -76,8 +76,7 @@ const PyramidBox = ({
         }
         dispatch(addItemList(item.id));
       }
-      console.log(latestItemList.length + 1, "length")
-      if (latestItemList.length + 1 === 21) {
+      if (latestItemList.length + 1 === 2) {
         onGameOver();
       }
     },

@@ -8,18 +8,17 @@ import Pyramid from "./components/Pyramid/Pyramid";
 import HighScoreCounter from "./components/HighScoreCounter/HighScoreCounter";
 import PlayerModal from "./components/PlayerModal";
 import HighScoreTable from "./components/HighScoreTable";
-import { useDispatch } from "react-redux";
-import { addHighScore,setSounds } from "./slices/scoreSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { addHighScore, setSounds } from "./slices/scoreSlice";
 import { isMobile } from "react-device-detect";
 import foodList from "./components/constant";
 import "./App.css";
 import GameOver from "./components/GameOver";
 
 
+
 export default function App() {
   const dispatch = useDispatch();
-  const [gameOverSound, setGameOverSound] = useState(new Audio("/sounds/gameover.wav"));
-
   const [gameOver, setGameOver] = useState(false);
   const [points, setPoints] = useState(100000);
   const screenWidth = window.innerWidth;
@@ -28,6 +27,8 @@ export default function App() {
   const [name, setName] = useState("");
   const backend = isMobile ? TouchBackend : HTML5Backend;
   const [isHighestScore, setIsHighestScore] = useState(false);
+
+
   const handleNewPlayer = () => {
     setPoints(100000);
     setModalOpen(true);
@@ -48,7 +49,6 @@ export default function App() {
   };
 
 
-
   const [items, setItems] = useState(
     foodList.map((image, index) => ({
       id: `item${index + 1}`,
@@ -64,14 +64,7 @@ export default function App() {
       prevItems.map((item) => (item.id === id ? { ...item, x, y } : item))
     );
   };
-  useEffect(() => {
-    gameOverSound.load(); // Preload the audio file
-  }, []);
 
-  const playGameOverSound = () => {
-    gameOverSound.currentTime = 0; // Reset sound to start
-    gameOverSound.play();
-  };
   useEffect(() => {
     if (isMobile) {
       const preventDefault = (e) => e.preventDefault();
@@ -113,13 +106,12 @@ export default function App() {
   useEffect(() => {
     if (gameOver) {
       dispatch(addHighScore({ name, score: points }));
-      playGameOverSound();
+      // play sound
     }
     if (!name) {
       setModalOpen(true);
     }
   }, [gameOver, points, name, dispatch]);
-
   const generatePreview = ({ itemType, item, style }) => {
     return (
       <div style={{ ...style, height: "80px", width: "80px" }}>
