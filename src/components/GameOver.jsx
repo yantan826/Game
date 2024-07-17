@@ -3,10 +3,11 @@ import {
   selectHighScores,
   updateHighestScorePersonDetails,
 } from "../slices/scoreSlice";
-import { useEffect } from "react";
+import { useEffect ,useState} from "react";
 import victory from "/sounds/victory.wav";
 import fail from "/sounds/gameover.wav";
 import Confetti from "react-confetti";
+
 
 const playVictorySound = () => {
   const sound = new Audio(victory);
@@ -25,10 +26,18 @@ const GameOver = ({ points, setIsHighestScore }) => {
   const highScores = useSelector(selectHighScores);
   const isHighScore = highScores.some((score) => points > score.score);
   const isHighestScore = highScores[0].score == points;
+  const [details, setDetails] = useState("");
 
-  const onSubmitHighScore = (name) => {
-    dispatch(updateHighestScorePersonDetails({ name: name, score: points }));
-  };
+  const onSubmitHighScore = (e) => {
+    e.preventDefault();
+    dispatch(
+      updateHighestScorePersonDetails({
+        name: highScores[0].name,
+        score: points,
+        details: details,
+      })
+    );
+  }
 
   useEffect(() => {
     if (isHighestScore || isHighScore) {
@@ -65,6 +74,7 @@ const GameOver = ({ points, setIsHighestScore }) => {
               type="text"
               name="details"
               placeholder="Name/Class/Phone"
+              onChange={(e) => setDetails(e.target.value)}
               className="p-3 border-2 border-black rounded-lg text-black bg-slate-100"
             />
           </form>

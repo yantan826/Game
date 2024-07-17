@@ -70,5 +70,6 @@ export const selectScore = (state) => state.score.initialScore;
 export const selectHighScores = (state) => state.score.highScores;
 export const selectItemList = (state) => state.score.itemList;
 export const selectSounds = (state) => state.score.sounds;
+export const selectHighestScorePersonDetails = (state) => state.score.highestScorePersonDetails;
 
 export default scoreSlice.reducer;

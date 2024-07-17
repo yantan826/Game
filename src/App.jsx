@@ -14,7 +14,7 @@ import { isMobile } from "react-device-detect";
 import foodList from "./components/constant";
 import "./App.css";
 import GameOver from "./components/GameOver";
-
+import TableScore from "./components/TableScore";
 
 
 export default function App() {
@@ -27,6 +27,8 @@ export default function App() {
   const [name, setName] = useState("");
   const backend = isMobile ? TouchBackend : HTML5Backend;
   const [isHighestScore, setIsHighestScore] = useState(false);
+  const [tableOpen, setTableOpen] = useState(false);
+
 
 
   const handleNewPlayer = () => {
@@ -136,8 +138,12 @@ export default function App() {
           <h1 className="text-2xl font-bold p-4 title">Food Pyramid Game</h1>
           <div className="flex justify-end me-3">
             <button className="new-player-btn" onClick={handleNewPlayer}>
-              <span className="arrow mt-[-8px] me-3">→</span> New Player
+              <span className="arrow mt-[-12px] me-3">→</span> New Player
             </button>
+            <button className="new-player-btn ms-10" onClick={() => setTableOpen(true)}>
+               High Scores
+            </button>
+            <TableScore isOpen={tableOpen} onClose={() => setTableOpen(false)} />
             <PlayerModal
               isOpen={modalOpen}
               onClose={handleClose}
